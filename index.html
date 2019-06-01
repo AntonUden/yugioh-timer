@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<script src="./jquery-3.4.1.min.js"></script>
+		<script src="./bootstrap.min.js"></script>
+		<link href="./bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript">
+			var startTime = 220;
+			var timeLeft = startTime;
+			var intervalId = null;
+			$(function() {
+				$('#btn_stop').on('click', function() {
+					stop();
+				});
+
+				$('#btn_start').on('click', function() {
+					start();
+				});
+
+				$('#btn_reset').on('click', function() {
+					reset();
+				});
+
+				$('#btn_add-time').on('click', function() {
+					addTime();
+				});
+
+				document.body.onkeyup = function(e) {
+					if(e.keyCode == 32) {
+						addTime();
+					}
+				}
+
+				update();
+			});
+
+			function update() {
+				$('#time').text(timeLeft);
+				if(timeLeft <= 0) {
+					$('#time').addClass('text-danger');
+				} else {
+					$('#time').removeClass('text-danger');
+				}
+			}
+
+			function reset() {
+				stop();
+				timeLeft = startTime;
+				update();
+			}
+
+			function addTime() {
+				timeLeft+=5;
+				update();
+			}
+
+			function stop() {
+				if(intervalId != null) {
+					clearInterval(intervalId);
+					intervalId = null;
+				}
+				update();
+			}
+
+			function start() {
+				if(intervalId == null) {
+					intervalId = setInterval(function() {
+						if(timeLeft <= 0) {
+							stop();
+						} else {
+							timeLeft--;
+						}
+						update();
+					}, 1000);
+				}
+			}
+		</script>
+		<style type="text/css">
+			.col-centered{
+				float: none;
+				margin: 0 auto;
+			}
+
+			#time {
+				font-size: 200px !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="text-center">
+			<span id="time"></span>
+			<div class="container mt-2">
+				<div class="row">
+					<div class="col-centered col-md-auto">
+						<button class="btn btn-primary" id="btn_start">Start</button>
+					</div>
+
+					<div class="col-centered  col-md-auto">
+						<button class="btn btn-primary" id="btn_stop">Stop</button>
+					</div>
+
+					<div class="col-centered  col-md-auto">
+						<button class="btn btn-primary" id="btn_reset">Reset</button>
+					</div>
+
+					<div class="col-centered  col-md-auto">
+						<button class="btn btn-primary" id="btn_add-time">+5</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
